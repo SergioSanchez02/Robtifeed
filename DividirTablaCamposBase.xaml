@@ -1,0 +1,357 @@
+<Activity mc:Ignorable="sap sap2010" x:Class="Dividirtabla" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib" xmlns:sd="clr-namespace:System.Data;assembly=System.Data" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="in_IntCantidadParticiones" Type="InArgument(x:Int32)" />
+    <x:Property Name="out_InfoDiv" Type="OutArgument(x:String)" />
+    <x:Property Name="out_ListDtPartes" Type="OutArgument(scg:List(sd:DataTable))" />
+    <x:Property Name="out_ListExcelColumnsLetters" Type="OutArgument(scg:List(x:String))" />
+    <x:Property Name="in_Dt" Type="InArgument(sd:DataTable)" />
+  </x:Members>
+  <sap:VirtualizedContainerService.HintSize>516,2106</sap:VirtualizedContainerService.HintSize>
+  <sap2010:WorkflowViewState.IdRef>ActivityBuilder_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <scg:List x:TypeArguments="x:String" Capacity="20">
+      <x:String>System.Activities</x:String>
+      <x:String>System.Activities.Statements</x:String>
+      <x:String>Microsoft.VisualBasic</x:String>
+      <x:String>System</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.IO</x:String>
+      <x:String>UiPath.Core.Activities</x:String>
+      <x:String>System.Activities.DynamicUpdate</x:String>
+      <x:String>System.Xml.Serialization</x:String>
+      <x:String>UiPath.Excel.Activities</x:String>
+      <x:String>System.Activities.Expressions</x:String>
+      <x:String>System.Diagnostics</x:String>
+      <x:String>System.Drawing</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Xml</x:String>
+      <x:String>System.Xml.Linq</x:String>
+      <x:String>System.Net.Mail</x:String>
+      <x:String>UiPath.Core</x:String>
+    </scg:List>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <scg:List x:TypeArguments="AssemblyReference" Capacity="28">
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>Microsoft.VisualBasic</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Drawing</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.UiAutomation.Activities</AssemblyReference>
+      <AssemblyReference>UiPath.System.Activities.Design</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>UiPath.Excel</AssemblyReference>
+      <AssemblyReference>UiPath.Mail</AssemblyReference>
+      <AssemblyReference>UiPath.CV</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>System.Data.Entity</AssemblyReference>
+      <AssemblyReference>UiPath.Excel.Activities</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+    </scg:List>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Dividir tabla" sap:VirtualizedContainerService.HintSize="496,2006" sap2010:WorkflowViewState.IdRef="Sequence_11">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(x:String)" Default="[New List(Of String)]" Name="vListStrColumnsName" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtIntermedia" />
+      <Variable x:TypeArguments="x:Int32" Name="vIntContadorExcelLetters" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtSpecifiedColumns" />
+      <Variable x:TypeArguments="sd:DataTable" Name="vDtRemainingColumns" />
+      <Variable x:TypeArguments="scg:List(x:String)" Name="vListParticiones" />
+    </Sequence.Variables>
+    <sap:WorkflowViewStateService.ViewState>
+      <scg:Dictionary x:TypeArguments="x:String, x:Object">
+        <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+        <x:Boolean x:Key="IsPinned">False</x:Boolean>
+      </scg:Dictionary>
+    </sap:WorkflowViewStateService.ViewState>
+    <Sequence DisplayName="Definir ciclo de particiones" sap:VirtualizedContainerService.HintSize="454,68" sap2010:WorkflowViewState.IdRef="Sequence_22">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="x:Int32" Name="vIntContadorParticiones" />
+      </Sequence.Variables>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Assign DisplayName="vListParticiones" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_16">
+        <Assign.To>
+          <OutArgument x:TypeArguments="scg:List(x:String)">[vListParticiones]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="scg:List(x:String)">[New List(Of String)]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign DisplayName="vIntContadorParticiones" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_15">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:Int32">[vIntContadorParticiones]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:Int32">[in_IntCantidadParticiones]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="{x:Null}" DisplayName="For Each [Cantidad de particiones]" sap:VirtualizedContainerService.HintSize="262,52" sap2010:WorkflowViewState.IdRef="ForEach`1_11" Values="[Enumerable.Range(1,in_IntCantidadParticiones).ToArray()]">
+        <ui:ForEach.Body>
+          <ActivityAction x:TypeArguments="x:Object">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Object" Name="item" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Creación lista de particiones" sap:VirtualizedContainerService.HintSize="304,214" sap2010:WorkflowViewState.IdRef="Sequence_23">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <AddToCollection x:TypeArguments="x:String" Collection="[vListParticiones]" DisplayName="Add To Collection [Particiones]" sap:VirtualizedContainerService.HintSize="262,22" sap2010:WorkflowViewState.IdRef="AddToCollection`1_16" Item="[vIntContadorParticiones.ToString]" />
+              <Assign DisplayName="vIntContadorParticiones" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_17">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">[vIntContadorParticiones]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">[vIntContadorParticiones-1]</InArgument>
+                </Assign.Value>
+              </Assign>
+            </Sequence>
+          </ActivityAction>
+        </ui:ForEach.Body>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ForEach>
+    </Sequence>
+    <If Condition="[in_Dt.Columns(in_Dt.Columns.Count-1).ToString=&quot;Column1&quot;]" DisplayName="¿Hay una columna vacía al final?" sap:VirtualizedContainerService.HintSize="454,52" sap2010:WorkflowViewState.IdRef="If_2">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <If.Then>
+        <ui:RemoveDataColumn Column="{x:Null}" ColumnIndex="{x:Null}" ColumnName="[in_Dt.Columns(in_Dt.Columns.Count-1).ToString]" DataTable="[in_Dt]" DisplayName="Remove Data Column" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="RemoveDataColumn_1" />
+      </If.Then>
+      <If.Else>
+        <ui:Comment sap:VirtualizedContainerService.HintSize="334,95" sap2010:WorkflowViewState.IdRef="Comment_1" Text="// Solo se remueve si está vacía, se identifica porque tendría el nombre génerico asignado por uipath que es column1" />
+      </If.Else>
+    </If>
+    <Sequence DisplayName="Partición Dt" sap:VirtualizedContainerService.HintSize="454,1330" sap2010:WorkflowViewState.IdRef="Sequence_17">
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Assign DisplayName="out_ListDtPartes" sap:VirtualizedContainerService.HintSize="412,60" sap2010:WorkflowViewState.IdRef="Assign_5">
+        <Assign.To>
+          <OutArgument x:TypeArguments="scg:List(sd:DataTable)">[out_ListDtPartes]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="scg:List(sd:DataTable)">[New List(Of System.Data.DataTable)]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign DisplayName="vDtIntermedia" sap:VirtualizedContainerService.HintSize="412,60" sap2010:WorkflowViewState.IdRef="Assign_4">
+        <Assign.To>
+          <OutArgument x:TypeArguments="sd:DataTable">[vDtIntermedia]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="sd:DataTable">[in_Dt.Copy]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign DisplayName="out_ListExcelColumnsLetters" sap:VirtualizedContainerService.HintSize="412,60" sap2010:WorkflowViewState.IdRef="Assign_11">
+        <Assign.To>
+          <OutArgument x:TypeArguments="scg:List(x:String)">[out_ListExcelColumnsLetters]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="scg:List(x:String)">[New List(Of String)]</InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign DisplayName="vIntContadorExcelLetters" sap:VirtualizedContainerService.HintSize="412,60" sap2010:WorkflowViewState.IdRef="Assign_6">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:Int32">[vIntContadorExcelLetters]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:Int32">1</InArgument>
+        </Assign.Value>
+      </Assign>
+      <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="{x:Null}" DisplayName="For Each [Particiones]" sap:VirtualizedContainerService.HintSize="412,838" sap2010:WorkflowViewState.IdRef="ForEach`1_8" Values="[vListParticiones]">
+        <ui:ForEach.Body>
+          <ActivityAction x:TypeArguments="x:Object">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="x:Object" Name="div" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Fragmentación" sap:VirtualizedContainerService.HintSize="376,703" sap2010:WorkflowViewState.IdRef="Sequence_13">
+              <Sequence.Variables>
+                <Variable x:TypeArguments="x:String" Name="vStrExcelLetter" />
+              </Sequence.Variables>
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <ui:ForEach x:TypeArguments="x:Object" CurrentIndex="{x:Null}" DisplayName="For Each [Columnas del feed]" sap:VirtualizedContainerService.HintSize="334,52" sap2010:WorkflowViewState.IdRef="ForEach`1_7" Values="[vDtIntermedia.Columns]">
+                <ui:ForEach.Body>
+                  <ActivityAction x:TypeArguments="x:Object">
+                    <ActivityAction.Argument>
+                      <DelegateInArgument x:TypeArguments="x:Object" Name="item" />
+                    </ActivityAction.Argument>
+                    <If Condition="[vDtIntermedia.Columns(item.ToString).Ordinal&lt;=vDtIntermedia.Columns.Count/convert.ToInt32(div)]" DisplayName="¿Las columnas están antes de la partición?" sap:VirtualizedContainerService.HintSize="484,210" sap2010:WorkflowViewState.IdRef="If_6">
+                      <If.Then>
+                        <AddToCollection x:TypeArguments="x:String" Collection="[vListStrColumnsName]" DisplayName="Add To Collection [Columnas antes de partición]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="AddToCollection`1_8" Item="[item.ToString]" />
+                      </If.Then>
+                      <If.Else>
+                        <ui:Break sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="Break_5" />
+                      </If.Else>
+                    </If>
+                  </ActivityAction>
+                </ui:ForEach.Body>
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+              </ui:ForEach>
+              <ui:InvokeWorkflowFile ContinueOnError="{x:Null}" DisplayName="Invoke SplitDataTable workflow" sap:VirtualizedContainerService.HintSize="334,87" sap2010:WorkflowViewState.IdRef="InvokeWorkflowFile_7" UnSafe="False" WorkflowFileName="SplitDataTable.xaml">
+                <ui:InvokeWorkflowFile.Arguments>
+                  <InArgument x:TypeArguments="s:String[]" x:Key="ColumnNames">[vListStrColumnsName.ToArray]</InArgument>
+                  <InArgument x:TypeArguments="sd:DataTable" x:Key="InputDT">[vDtIntermedia]</InArgument>
+                  <OutArgument x:TypeArguments="sd:DataTable" x:Key="SpecifiedColumnsDT">[vDtSpecifiedColumns]</OutArgument>
+                  <OutArgument x:TypeArguments="sd:DataTable" x:Key="RemainingColumnsDT">[vDtRemainingColumns]</OutArgument>
+                </ui:InvokeWorkflowFile.Arguments>
+              </ui:InvokeWorkflowFile>
+              <Assign DisplayName="vDtIntermedia" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_3">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="sd:DataTable">[vDtIntermedia]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="sd:DataTable">[vDtRemainingColumns]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <AddToCollection x:TypeArguments="sd:DataTable" Collection="[out_ListDtPartes]" DisplayName="Add To Collection [Tablas]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="AddToCollection`1_9" Item="[vDtSpecifiedColumns.Copy]" />
+              <ClearCollection x:TypeArguments="x:String" Collection="[vListStrColumnsName]" DisplayName="Clear Collection [Nombres de columnas]" sap:VirtualizedContainerService.HintSize="334,22" sap2010:WorkflowViewState.IdRef="ClearCollection`1_4" />
+              <Sequence DisplayName="Llenar lista letras de columna excel" sap:VirtualizedContainerService.HintSize="334,68" sap2010:WorkflowViewState.IdRef="Sequence_16">
+                <sap:WorkflowViewStateService.ViewState>
+                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                    <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                    <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                  </scg:Dictionary>
+                </sap:WorkflowViewStateService.ViewState>
+                <ui:InvokeCode ContinueOnError="{x:Null}" Code="Dim dividend As Integer = in_ColumnNumber&#xA;&#xA;Dim modulo As Integer&#xA;While dividend &gt; 0&#xA;&#x9;modulo = (dividend - 1) Mod 26&#xA;&#x9;out_ColumnLetter = Convert.ToChar(65 + modulo).ToString() &amp; out_ColumnLetter&#xA;&#x9;dividend = CInt(((dividend - modulo) / 26))&#xA;End While" DisplayName="Letter From Index Excel" sap:VirtualizedContainerService.HintSize="200,52" sap2010:WorkflowViewState.IdRef="InvokeCode_1">
+                  <ui:InvokeCode.Arguments>
+                    <InArgument x:TypeArguments="x:Int32" x:Key="in_ColumnNumber">[vIntContadorExcelLetters]</InArgument>
+                    <OutArgument x:TypeArguments="x:String" x:Key="out_ColumnLetter">[vStrExcelLetter]</OutArgument>
+                  </ui:InvokeCode.Arguments>
+                  <sap:WorkflowViewStateService.ViewState>
+                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                      <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+                      <x:Boolean x:Key="IsPinned">False</x:Boolean>
+                    </scg:Dictionary>
+                  </sap:WorkflowViewStateService.ViewState>
+                </ui:InvokeCode>
+                <AddToCollection x:TypeArguments="x:String" Collection="[out_ListExcelColumnsLetters]" DisplayName="Add To Collection [Excel Letters]" sap:VirtualizedContainerService.HintSize="200,22" sap2010:WorkflowViewState.IdRef="AddToCollection`1_11" Item="[vStrExcelLetter]" />
+              </Sequence>
+              <Assign DisplayName="Incremento contador index para excel" sap:VirtualizedContainerService.HintSize="334,60" sap2010:WorkflowViewState.IdRef="Assign_7">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">[vIntContadorExcelLetters]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">[vIntContadorExcelLetters+vDtSpecifiedColumns.Columns.Count]</InArgument>
+                </Assign.Value>
+              </Assign>
+            </Sequence>
+          </ActivityAction>
+        </ui:ForEach.Body>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ForEach>
+    </Sequence>
+    <Sequence DisplayName="Extraer información de fragmentos" sap:VirtualizedContainerService.HintSize="454,344" sap2010:WorkflowViewState.IdRef="Sequence_24">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="x:Int32" Name="vIntContadorInfo" />
+      </Sequence.Variables>
+      <sap:WorkflowViewStateService.ViewState>
+        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          <x:Boolean x:Key="IsPinned">False</x:Boolean>
+        </scg:Dictionary>
+      </sap:WorkflowViewStateService.ViewState>
+      <Assign DisplayName="out_InfoDiv" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_18">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:String">[out_InfoDiv]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:String">
+            <Literal x:TypeArguments="x:String" Value="" />
+          </InArgument>
+        </Assign.Value>
+      </Assign>
+      <Assign DisplayName="vIntContadorInfo" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_19">
+        <Assign.To>
+          <OutArgument x:TypeArguments="x:Int32">[vIntContadorInfo]</OutArgument>
+        </Assign.To>
+        <Assign.Value>
+          <InArgument x:TypeArguments="x:Int32">0</InArgument>
+        </Assign.Value>
+      </Assign>
+      <ui:ForEach x:TypeArguments="sd:DataTable" CurrentIndex="{x:Null}" DisplayName="For Each [ListDt1]" sap:VirtualizedContainerService.HintSize="262,52" sap2010:WorkflowViewState.IdRef="ForEach`1_13" Values="[out_ListDtPartes]">
+        <ui:ForEach.Body>
+          <ActivityAction x:TypeArguments="sd:DataTable">
+            <ActivityAction.Argument>
+              <DelegateInArgument x:TypeArguments="sd:DataTable" Name="item" />
+            </ActivityAction.Argument>
+            <Sequence DisplayName="Extraer informacion para log fragmentación lado 1" sap:VirtualizedContainerService.HintSize="304,252" sap2010:WorkflowViewState.IdRef="Sequence_26">
+              <sap:WorkflowViewStateService.ViewState>
+                <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                  <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                </scg:Dictionary>
+              </sap:WorkflowViewStateService.ViewState>
+              <Assign DisplayName="out_InfoDiv" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_20">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:String">[out_InfoDiv]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:String">[out_InfoDiv+vbCrLf+"Excel desde columna "+out_ListExcelColumnsLetters(vIntContadorInfo)+" se añaden "+item.Columns.Count.ToString+" campos"]</InArgument>
+                </Assign.Value>
+              </Assign>
+              <Assign DisplayName="vIntContadorInfo" sap:VirtualizedContainerService.HintSize="262,60" sap2010:WorkflowViewState.IdRef="Assign_21">
+                <Assign.To>
+                  <OutArgument x:TypeArguments="x:Int32">[vIntContadorInfo]</OutArgument>
+                </Assign.To>
+                <Assign.Value>
+                  <InArgument x:TypeArguments="x:Int32">[vIntContadorInfo+1]</InArgument>
+                </Assign.Value>
+              </Assign>
+            </Sequence>
+          </ActivityAction>
+        </ui:ForEach.Body>
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </ui:ForEach>
+    </Sequence>
+  </Sequence>
+</Activity>
